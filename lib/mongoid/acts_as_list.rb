@@ -13,6 +13,8 @@ module ActsAsList
       key = self.default_position_column || :position
       klass.field key, :type => Integer 
       klass.acts_as_list :column => key.to_s
+      klass.class_eval("after_create :add_to_list_bottom")
+      klass.class_eval("before_destroy :decrement_positions_on_lower_items")
     end
 
     module InitializerMethods
